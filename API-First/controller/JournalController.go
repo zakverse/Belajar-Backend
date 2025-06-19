@@ -28,3 +28,27 @@ func CreateJournal (c *gin.Context){
 })
 }
 
+func UpdateJournal (c *gin.Context){
+
+	id := c.Param("id")
+	var u model.Journal
+
+	if err := c.ShouldBindJSON(&u);
+
+	err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"massage" : err.Error()})
+		return
+	}
+	_,err := db.DB.Exec("update seller set ... = ? , ....= ? where id = ? ",u.ProductCode, id , u.SellerCode , u.Total)
+
+	if err != nil{
+		c.JSON(http.StatusBadRequest,gin.H{"massage":err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK , gin.H{
+		"massage" : "Update Success",
+	})
+
+
+}
+

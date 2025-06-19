@@ -16,7 +16,8 @@ func CreateProduct (c *gin.Context){
 		c.JSON(http.StatusBadRequest,gin.H{"massage":err.Error()})
 		return
 	}
-	result,err := db.DB.Exec("insert into product(product_code , product_name , stock , price , category_code )Values(?,?,?,?,?)", u.ProductCode , u.ProductName , u.Stock, u.Price , u.CategoryCode)
+	result,err := db.DB.Exec("insert into product(product_code , product_name , stock , price , category_code )Values(?,?,?,?,?)",
+	 u.ProductCode , u.ProductName , u.Stock, u.Price , u.CategoryCode)
 
 	if err != nil{
 		c.JSON(http.StatusBadRequest,gin.H{"massage":err.Error()})
@@ -26,5 +27,29 @@ func CreateProduct (c *gin.Context){
     "message": "Success",
     "data":    result,
 })
+}
+
+func UpdateProduct (c *gin.Context){
+
+	id := c.Param("id")
+	var u model.Product
+
+	if err := c.ShouldBindJSON(&u);
+
+	err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"massage" : err.Error()})
+		return
+	}
+	_,err := db.DB.Exec("update seller set ... = ? , ....= ? where id = ? ",u.ProductCode, u.ProductName, id ,u.Price , u.Stock)
+
+	if err != nil{
+		c.JSON(http.StatusBadRequest,gin.H{"massage":err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK , gin.H{
+		"massage" : "Update Success",
+	})
+
+
 }
 
